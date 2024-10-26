@@ -1,12 +1,18 @@
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import styles from './page.module.css';
 
-export default function Home() {
-  
+export default async function Home() {
+  const cookieStore = cookies();
+  const token = (await cookieStore).get('token')?.value;
+
+  if (!token) {
+    return redirect('/login');
+  }
+
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-       
-      </header>
+      <header className={styles.header}></header>
 
       <section className={styles.hero}>
         <div className={styles.heroContent}>

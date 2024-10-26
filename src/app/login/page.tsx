@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { login } from '@/services/api';
 import styles from './Login.module.css';
 
 const LoginPage = () => {
@@ -12,12 +11,23 @@ const LoginPage = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
+
         try {
-            const data = await login(email, password);
-            localStorage.setItem('token', data.token);
-            router.push('/');
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            if (res.ok) {
+                router.push('/');
+            } else {
+                console.error('Error during login:', await res.json());
+            }
         } catch (error) {
-            console.error('Error logging in', error);
+            console.error('Error logging in:', error);
         }
     };
 
@@ -42,7 +52,6 @@ const LoginPage = () => {
                     className={styles.input}
                 />
                 <button type="submit" className={styles.button}>Let&#39;s go</button>
-
             </form>
         </div>
     );
