@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
     const { id } = params;
 
     const res = await fetch(`https://kata.conducerevel.com/films/genres/${id}/movies`, {
